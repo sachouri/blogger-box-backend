@@ -2,54 +2,77 @@ package com.dauphine.blogger.services.impl;
 
 import com.dauphine.blogger.models.Category;
 import com.dauphine.blogger.models.Post;
+import com.dauphine.blogger.repositories.PostRepository;
 import com.dauphine.blogger.services.PostService;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements PostService {
 
-    private final List<Post> temporaryPosts;
+    private final PostRepository repository;
 
-    public PostServiceImpl() {
-        temporaryPosts = new ArrayList<>();
-        temporaryPosts.add(new Post(UUID.randomUUID(), "title", "content",
-                new Category(UUID.randomUUID(),"category")));
-        temporaryPosts.add(new Post(UUID.randomUUID(), "title", "content",
-                new Category(UUID.randomUUID(),"category")));
+    public PostServiceImpl(PostRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public List<Post> getAllByCategoryID(UUID categoryID) {
-        return List.of();
+    public List<Post> getAllByCategoryId(UUID categoryID) {
+        return repository.findAll().stream()
+                .filter(post -> categoryID.equals(post.getCategoryId()))
+                .sorted((p1, p2) -> p2.getCreatedDate().compareTo(p1.getCreatedDate()))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<Post> getAll() {
-        return List.of();
+        return repository.findAll(Sort.by(Sort.Direction.DESC, "createdDate"));
     }
 
     @Override
     public Post getById(UUID id) {
-        return null;
+        return repository.findById(id)
+                .orElse(null);
     }
 
     @Override
     public Post create(String title, String content, UUID categoryID) {
-        return null;
+        Post post = new Post(UUID.randomUUID(), title, content, categoryID);
+        return repository.save(post);
     }
 
     @Override
-    public Post update(UUID categoryID, String title, String content) {
-        return null;
+    public Post update(UUID id, String title, String content) {
+        Post post = getById(id);
+        if (post == null) {
+            return null;
+        }
+        post.setTitle(title);
+        post.setContent(content);
+        return repository.save(post);
     }
 
     @Override
     public boolean deleteById(UUID id) {
-        return false;
+        repository.deleteById(id);
+        return true;
+    }
+
+    /*
+    @Override
+    public List<Post> getByCreatedDateBetween(Timestamp start, Timestamp end) {
+        return repository.findByCreatedDateBetween(start, end);
+    }
+     */
+
+    @Override
+    public List<Post> getAllByTitleOrContent(String value) {
+        return repository.findAllByTitleOrContent(value);
     }
 }

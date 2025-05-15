@@ -1,5 +1,6 @@
 package com.dauphine.blogger.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -20,13 +21,14 @@ public class Post {
     private String content;
 
     @Column(name = "created_date")
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime createdDate;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
-    public Post() {}
+    public Post() { }
 
     public Post(UUID id, String title, String content, Category category) {
         this.id = UUID.randomUUID();
@@ -34,6 +36,15 @@ public class Post {
         this.content = content;
         this.createdDate = LocalDateTime.now();
         this.category = category;
+
+    }
+
+    public Post(UUID id, String title, String content, UUID categoryID) {
+        this.id = UUID.randomUUID();
+        this.title = title;
+        this.content = content;
+        this.createdDate = LocalDateTime.now();
+        this.category = new Category(categoryID);
 
     }
 
@@ -67,4 +78,11 @@ public class Post {
     public void setCategory(Category category) {
         this.category = category;
     }
+    public UUID getCategoryId() {
+        return category.getId();
+    }
+    public void setCategoryId(UUID categoryId) {
+        (this.category).setId(categoryId);
+    }
+
 }

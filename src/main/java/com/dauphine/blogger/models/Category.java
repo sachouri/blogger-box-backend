@@ -10,6 +10,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "category")
 public class Category {
+
     @Id
     @Column(name = "id")
     private UUID id;
@@ -22,7 +23,12 @@ public class Category {
         this.name = name;
     }
 
-    public Category() {}
+    public Category(UUID id) {
+        this.id = id;
+        this.name = "default";
+    }
+
+    public Category() { }
 
     public UUID getId() {
         return id;
