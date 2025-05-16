@@ -2,7 +2,6 @@ package com.dauphine.blogger.controllers;
 
 import com.dauphine.blogger.dto.CreationPostRequest;
 import com.dauphine.blogger.dto.UpdatePostRequest;
-import com.dauphine.blogger.exceptions.CategoryNotFoundByIdException;
 import com.dauphine.blogger.exceptions.PostNotFoundByIdException;
 import com.dauphine.blogger.models.Post;
 import com.dauphine.blogger.services.PostService;
