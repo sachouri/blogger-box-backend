@@ -17,8 +17,11 @@ Spring Boot + Spring Data JPA application providing a REST API for a blogging pl
 git clone https://github.com/your-org/blogger-box-backend.git
 cd blogger-box-backend
 ./mvnw clean package
+```
 
 ### 2. Run Application
 
 ```bash
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=local
+```
+
