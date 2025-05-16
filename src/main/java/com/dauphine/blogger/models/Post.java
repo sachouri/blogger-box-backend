@@ -2,7 +2,6 @@ package com.dauphine.blogger.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -24,6 +23,7 @@ public class Post {
 
     @Column(name = "created_date")
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    //@JsonFormat(shape = JsonFormat.Shape.STRING)
     private LocalDateTime createdDate;
 
     @ManyToOne

@@ -7,6 +7,7 @@ import com.dauphine.blogger.models.Post;
 import com.dauphine.blogger.services.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,10 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("v1/posts")
+@Tag(
+        name = "Post API",
+        description = "Post endpoints"
+)
 public class PostController {
 
     private final PostService postService;

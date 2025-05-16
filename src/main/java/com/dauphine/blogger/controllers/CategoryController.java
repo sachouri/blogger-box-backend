@@ -10,6 +10,7 @@ import com.dauphine.blogger.services.CategoryService;
 import com.dauphine.blogger.services.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,10 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/categories")
+@Tag(
+        name = "Category API",
+        description = "Category endpoints"
+)
 public class CategoryController {
 
     private final CategoryService categoryService;

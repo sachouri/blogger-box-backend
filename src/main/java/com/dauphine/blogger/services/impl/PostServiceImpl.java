@@ -75,7 +75,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> getByCreatedDateBetween(Timestamp start, Timestamp end) {
-        return repository.findByCreatedDateBetween(start, end);
+        return repository.findByCreatedDateBetween(start.toLocalDateTime(), end.toLocalDateTime());
     }
 
     @Override
