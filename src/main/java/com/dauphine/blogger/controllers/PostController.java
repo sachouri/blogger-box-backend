@@ -11,13 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.persistence.EntityNotFoundException;
-
+import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("v1/posts")
-//@Tag(name = "Post Controller", description = "Manage blog posts")
 public class PostController {
 
     private final PostService postService;
@@ -42,7 +41,9 @@ public class PostController {
                 creationPostRequest.getContent(),
                 creationPostRequest.getCategoryId()
         );
-        return ResponseEntity.status(201).body(post);
+        return ResponseEntity
+                .created(URI.create("/v1/posts/" + post.getId()))
+                .body(post);
     }
 
     @PutMapping("{id}")
@@ -119,13 +120,17 @@ public class PostController {
         List<Post> posts = postService.getAll();
         return ResponseEntity.ok(posts);
     }
+    */
 
-    @GetMapping("v1/posts/category/{categoryId}")
-    @Operation(summary = "Get posts by category", description = "Returns all posts for a specific category")
-    public ResponseEntity<List<Post>> getByCategory(
-            @Parameter(description = "ID of the category to filter posts", required = true)
+    @GetMapping("category/{categoryId}")
+    @Operation(
+            summary = "Get posts by category id",
+            description = "Retrieve all posts in a category"
+    )
+    public ResponseEntity<List<Post>> getAllByCategory(
+            @Parameter(description = "category id", required = true)
             @PathVariable UUID categoryId) {
-        List<Post> posts = postService.getByCategory(categoryId);
+        List<Post> posts = postService.getAllByCategoryId(categoryId);
         return ResponseEntity.ok(posts);
-    } */
+    }
 }

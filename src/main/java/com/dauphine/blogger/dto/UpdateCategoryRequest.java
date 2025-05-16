@@ -17,7 +17,6 @@ public class UpdateCategoryRequest {
 
     public UUID getId() {
         return id;
-
     }
 
     public void setId(UUID id) {

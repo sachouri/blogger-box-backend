@@ -28,6 +28,11 @@ public class Category {
         this.name = "default";
     }
 
+    public Category(String name) {
+        this.id = UUID.randomUUID();
+        this.name = name;
+    }
+
     public Category() { }
 
     public UUID getId() {

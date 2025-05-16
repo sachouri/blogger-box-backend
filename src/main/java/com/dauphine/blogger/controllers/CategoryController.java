@@ -1,13 +1,14 @@
 package com.dauphine.blogger.controllers;
 
 import com.dauphine.blogger.dto.CreationCategoryRequest;
+import com.dauphine.blogger.exceptions.CategoryNameAlreadyExistsException;
 import com.dauphine.blogger.exceptions.CategoryNotFoundByIdException;
 import com.dauphine.blogger.models.Category;
 import com.dauphine.blogger.models.Post;
 import com.dauphine.blogger.services.CategoryService;
 import com.dauphine.blogger.services.PostService;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.persistence.EntityExistsException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,7 @@ public class CategoryController {
     private final CategoryService categoryService;
     private final PostService postService;
 
+    @Autowired
     public CategoryController(CategoryService categoryService, PostService postService) {
         this.categoryService = categoryService;
         this.postService = postService;
@@ -47,7 +49,7 @@ public class CategoryController {
             description = "Create new category, only required field is the name of the category to create"
     )
     public ResponseEntity<Category> createCategory(
-            @RequestBody CreationCategoryRequest creationCategoryRequest) throws EntityExistsException {
+            @RequestBody CreationCategoryRequest creationCategoryRequest) throws CategoryNameAlreadyExistsException {
         Category category = categoryService.create(creationCategoryRequest.getName());
         return ResponseEntity
                 .created(URI.create("/v1/categories/" + category.getId()))
@@ -59,9 +61,13 @@ public class CategoryController {
             summary = "Update category",
             description = "Update category name by id"
     )
-    public Category updateCategory(@PathVariable UUID id,
-                                   @RequestBody String name){
-        return categoryService.update(id, name);
+    public ResponseEntity<Category> updateCategory(@PathVariable UUID id,
+                                                   @RequestBody CreationCategoryRequest categoryRequest) {
+        Category updated = categoryService.update(id, categoryRequest.getName());
+        if (updated == null) {
+            throw new CategoryNotFoundByIdException(id);
+        }
+        return ResponseEntity.ok(updated);
     }
 
     @PatchMapping("{id}")
@@ -69,7 +75,8 @@ public class CategoryController {
             summary = "Partially update category",
             description = "Update a sub part of a category name"
     )
-    public ResponseEntity<Category> patch(@PathVariable UUID id, @RequestBody CreationCategoryRequest categoryRequest) {
+    public ResponseEntity<Category> patch(@PathVariable UUID id,
+                                          @RequestBody CreationCategoryRequest categoryRequest) {
         Category updated = categoryService.update(id, categoryRequest.getName());
         if (updated == null) {
             throw new CategoryNotFoundByIdException(id);
@@ -82,8 +89,12 @@ public class CategoryController {
             summary = "Delete category",
             description = "Delete category by id"
     )
-    public boolean deleteCategory(@PathVariable UUID id){
-        return categoryService.deleteById(id);
+    public ResponseEntity<Void> deleteCategory(@PathVariable UUID id) {
+        boolean deleted = categoryService.deleteById(id);
+        if (!deleted) {
+            throw new CategoryNotFoundByIdException(id);
+        }
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping

@@ -4,6 +4,7 @@ import com.dauphine.blogger.exceptions.CategoryNotFoundByIdException;
 import com.dauphine.blogger.models.Category;
 import com.dauphine.blogger.repositories.CategoryRepository;
 import com.dauphine.blogger.services.CategoryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository repository;
 
+    @Autowired
     public CategoryServiceImpl(CategoryRepository repository) {
         this.repository = repository;
     }

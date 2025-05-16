@@ -4,6 +4,7 @@ import com.dauphine.blogger.models.Category;
 import com.dauphine.blogger.models.Post;
 import com.dauphine.blogger.repositories.PostRepository;
 import com.dauphine.blogger.services.PostService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository repository;
 
+    @Autowired
     public PostServiceImpl(PostRepository repository) {
         this.repository = repository;
     }
@@ -26,7 +28,7 @@ public class PostServiceImpl implements PostService {
     public List<Post> getAllByCategoryId(UUID categoryID) {
         return repository.findAll().stream()
                 .filter(post -> categoryID.equals(post.getCategoryId()))
-                .sorted((p1, p2) -> p2.getCreatedDate().compareTo(p1.getCreatedDate()))
+                .sorted((post1, post2) -> post2.getCreatedDate().compareTo(post1.getCreatedDate()))
                 .collect(Collectors.toList());
     }
 
