@@ -1,6 +1,8 @@
 package com.dauphine.blogger.services.impl;
 
+import com.dauphine.blogger.models.Category;
 import com.dauphine.blogger.models.Post;
+import com.dauphine.blogger.repositories.CategoryRepository;
 import com.dauphine.blogger.repositories.PostRepository;
 import com.dauphine.blogger.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +18,12 @@ import java.util.stream.Collectors;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository repository;
+    private final CategoryRepository categoryRepository;
 
     @Autowired
-    public PostServiceImpl(PostRepository repository) {
+    public PostServiceImpl(PostRepository repository, CategoryRepository categoryRepository) {
         this.repository = repository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
@@ -43,7 +47,12 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post create(String title, String content, UUID categoryID) {
-        Post post = new Post(UUID.randomUUID(), title, content, categoryID);
+        Category category = categoryRepository.findById(categoryID).orElse(null);
+        if (category == null) {
+            category = new Category(categoryID, "Default Category");
+            categoryRepository.save(category);
+        }
+        Post post = new Post(UUID.randomUUID(), title, content, category);
         return repository.save(post);
     }
 

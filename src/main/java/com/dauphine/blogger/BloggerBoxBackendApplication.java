@@ -18,7 +18,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class BloggerBoxBackendApplication {
 
 	public static void main(String[] args) {
-
 		SpringApplication.run(BloggerBoxBackendApplication.class, args);
 	}
 
