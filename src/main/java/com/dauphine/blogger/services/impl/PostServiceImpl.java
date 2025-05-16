@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -63,12 +64,10 @@ public class PostServiceImpl implements PostService {
         return true;
     }
 
-    /*
     @Override
     public List<Post> getByCreatedDateBetween(Timestamp start, Timestamp end) {
         return repository.findByCreatedDateBetween(start, end);
     }
-     */
 
     @Override
     public List<Post> getAllByTitleOrContent(String value) {

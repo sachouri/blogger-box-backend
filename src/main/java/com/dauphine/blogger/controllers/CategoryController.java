@@ -104,12 +104,13 @@ public class CategoryController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping
+    @GetMapping()
     @Operation(
             summary = "Get all categories",
             description = "Retrieve all categories or filter like name"
     )
     public ResponseEntity<List<Category>> getAll(@RequestParam(required = false) String name){
+        System.out.println("GET /v1/posts called");
         List<Category> categories = name == null || name.isBlank()
                 ? categoryService.getAll()
                 : categoryService.getAllLikeName(name);

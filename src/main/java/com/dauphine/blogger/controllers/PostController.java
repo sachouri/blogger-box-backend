@@ -8,11 +8,15 @@ import com.dauphine.blogger.services.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -93,8 +97,8 @@ public class PostController {
         return ResponseEntity.noContent().build();
     }
 
-    /*
-    @GetMapping("v1/posts")
+
+    @GetMapping()
     @Operation(
             summary = "Get all posts (optional : filter by date, title or content)",
             description = "Returns all posts or filters by optional creation date (dd-MM-yyyy), title, or content"
@@ -116,14 +120,13 @@ public class PostController {
         }
 
         if (value.isPresent()) {
-            List<Post> posts = postService.getByTitleOrContent(value.get());
+            List<Post> posts = postService.getAllByTitleOrContent(value.get());
             return ResponseEntity.ok(posts);
         }
 
         List<Post> posts = postService.getAll();
         return ResponseEntity.ok(posts);
     }
-    */
 
     @GetMapping("category/{categoryId}")
     @Operation(
