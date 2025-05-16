@@ -1,6 +1,7 @@
 package com.dauphine.blogger.controllers;
 
 import com.dauphine.blogger.dto.CreationCategoryRequest;
+import com.dauphine.blogger.dto.UpdateCategoryRequest;
 import com.dauphine.blogger.exceptions.CategoryNameAlreadyExistsException;
 import com.dauphine.blogger.exceptions.CategoryNotFoundByIdException;
 import com.dauphine.blogger.models.Category;
@@ -8,6 +9,7 @@ import com.dauphine.blogger.models.Post;
 import com.dauphine.blogger.services.CategoryService;
 import com.dauphine.blogger.services.PostService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -61,13 +63,18 @@ public class CategoryController {
             summary = "Update category",
             description = "Update category name by id"
     )
-    public ResponseEntity<Category> updateCategory(@PathVariable UUID id,
-                                                   @RequestBody CreationCategoryRequest categoryRequest) {
-        Category updated = categoryService.update(id, categoryRequest.getName());
-        if (updated == null) {
+    public ResponseEntity<Category> updateCategory(
+            @Parameter(description = "category id", required = true)
+            @PathVariable UUID id,
+            @Parameter(description = "category update request")
+            @RequestBody UpdateCategoryRequest updateCategoryRequest) {
+        Category updatedCategory = categoryService.update(
+                id,
+                updateCategoryRequest.getName());
+        if (updatedCategory == null) {
             throw new CategoryNotFoundByIdException(id);
         }
-        return ResponseEntity.ok(updated);
+        return ResponseEntity.ok(updatedCategory);
     }
 
     @PatchMapping("{id}")

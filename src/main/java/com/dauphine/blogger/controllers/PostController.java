@@ -2,6 +2,7 @@ package com.dauphine.blogger.controllers;
 
 import com.dauphine.blogger.dto.CreationPostRequest;
 import com.dauphine.blogger.dto.UpdatePostRequest;
+import com.dauphine.blogger.exceptions.CategoryNotFoundByIdException;
 import com.dauphine.blogger.exceptions.PostNotFoundByIdException;
 import com.dauphine.blogger.models.Post;
 import com.dauphine.blogger.services.PostService;
@@ -51,15 +52,18 @@ public class PostController {
             summary = "Update post",
             description = "Update post by id")
     public ResponseEntity<Post> update(
-            @Parameter(description = "id of post", required = true)
+            @Parameter(description = "post id", required = true)
             @PathVariable UUID id,
-            @Parameter(description = "Post update request")
+            @Parameter(description = "post update request")
             @RequestBody UpdatePostRequest updatePostRequest) {
         Post updatedPost = postService.update(
                 id,
                 updatePostRequest.getTitle(),
                 updatePostRequest.getContent()
         );
+        if (updatedPost == null) {
+            throw new PostNotFoundByIdException(id);
+        }
         return ResponseEntity.ok(updatedPost);
     }
 
