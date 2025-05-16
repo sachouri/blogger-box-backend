@@ -7,7 +7,6 @@ Spring Boot + Spring Data JPA application providing a REST API for a blogging pl
 - **PostgreSQL**  
 - **Hibernate ORM**  
 
----
 
 ## Quick Start
 
