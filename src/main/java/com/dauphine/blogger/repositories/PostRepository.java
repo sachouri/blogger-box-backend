@@ -12,7 +12,7 @@ import java.util.UUID;
 public interface PostRepository extends JpaRepository<Post, UUID> {
 
     @Query("""
-        SELECT post 
+        SELECT post
         FROM Post post
         WHERE UPPER(post.title) LIKE UPPER(CONCAT('%', :value, '%')) 
                 OR UPPER(post.content) LIKE UPPER(CONCAT('%', :value, '%'))
